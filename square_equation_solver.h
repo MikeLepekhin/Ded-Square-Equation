@@ -20,7 +20,7 @@ class SquareEquationAnswer {
   Field* answer_1_{nullptr};
   Field* answer_2_{nullptr};
 
-  void setAnswer(Field* answer, const Field& new_value) {
+  void setAnswer(Field*& answer, const Field& new_value) {
     if (answer != nullptr) {
       delete answer;
     }
@@ -106,13 +106,14 @@ class SquareEquationAnswer {
   }
 
   Field getAnswer(size_t answer_id = 0) const {
-   if (answer_id >= answer_cnt_) {
+    if (answer_id >= answer_cnt_) {
       throw IncorrectArgumentException("It is more than count of solutions");
     }
 
     switch (answer_id) {
       case 0: return *answer_1_;
       case 1: return *answer_2_;
+      default: throw IncorrectArgumentException("Possible values: 0 and 1");
     }
   }
 
@@ -122,6 +123,10 @@ class SquareEquationAnswer {
 
   size_t size() const {
     return answer_cnt_;
+  }
+
+  bool empty() const {
+    return answer_cnt_ == 0;
   }
 
   operator std::vector<Field>() const {
@@ -150,6 +155,9 @@ std::ostream& operator<<(std::ostream& os, const SquareEquationAnswer<Field>& an
     return os;
   }
   os << "The number of solutions: " << answer.size() << "\n";
+  if (!answer.empty()) {
+    os << "Solutions: ";
+  }
   for (size_t answer_id = 0; answer_id < answer.size(); ++answer_id) {
     os << answer[answer_id] << ' ';
   }
@@ -158,34 +166,26 @@ std::ostream& operator<<(std::ostream& os, const SquareEquationAnswer<Field>& an
 }
 
 template <class Field = double, class EqualityPredicate = DefaultEqualityPredicate<Field>>
-class DefaultSquareSolverImpl {
- public:
-   static SquareEquationAnswer<Field> solve(const Field& coeff_a = 0, const Field& coeff_b = 0, const Field& coeff_c = 0) {
-     if (EqualityPredicate()(coeff_a, 0.0)) {
-       return LinearEquationSolver<Field, EqualityPredicate>::solve(coeff_b, coeff_c);
-     }
+SquareEquationAnswer<Field> solveSquareEquation(const Field& coeff_a = 0, const Field& coeff_b = 0, const Field& coeff_c = 0) {
+  if (!std::isfinite(coeff_a) || !std::isfinite(coeff_b) || !std::isfinite(coeff_c)) {
+    throw IncorrectArgumentException("some of the arguments are infinite");
+  }
 
-     SquareEquationAnswer<Field> result;
-     Field D = coeff_b * coeff_b - 4.0 * coeff_a * coeff_c;
+  if (EqualityPredicate()(coeff_a, 0.0)) {
+    return solveLinearEquation<Field, EqualityPredicate>(coeff_b, coeff_c);
+  }
 
-     if (EqualityPredicate()(D, 0.0)) {
-       result.addAnswer(-coeff_b / (2.0 * coeff_a));
-       std::cout << -coeff_b / (2.0 * coeff_a) << '\n';
-     } else if (D > 0.0) {
-       Field D_sqrt = sqrt(D);
-       result.addAnswer((-coeff_b + D_sqrt) / (2.0 * coeff_a));
-       result.addAnswer((-coeff_b - D_sqrt) / (2.0 * coeff_a));
-     }
-     return result;
-   }
-};
+  SquareEquationAnswer<Field> result;
+  Field D = coeff_b * coeff_b - 4.0 * coeff_a * coeff_c;
 
-template <class Field = double, class SolverImpl = DefaultSquareSolverImpl<Field>>
-class SquareEquationSolver {
- public:
-   static SquareEquationAnswer<Field> solve(Field coeff_a = 0, Field coeff_b = 0, Field coeff_c = 0) {
-     return SolverImpl::solve(coeff_a, coeff_b, coeff_c);
-   }
-};
+  if (EqualityPredicate()(D, 0.0)) {
+    result.addAnswer(-coeff_b / (2.0 * coeff_a));
+  } else if (D > 0.0) {
+    Field D_sqrt = sqrt(D);
+    result.addAnswer((-coeff_b + D_sqrt) / (2.0 * coeff_a));
+    result.addAnswer((-coeff_b - D_sqrt) / (2.0 * coeff_a));
+  }
+  return result;
+}
 
 #endif //SQUARE_EQUATION_SQUARE_EQUATION_SOLVER_H

@@ -113,30 +113,26 @@ std::ostream& operator<<(std::ostream& os, const LinearEquationAnswer<Field>& an
     return os;
   }
 
-  os << "The number of solutions: " << answer.size() << "\n";
-  if (answer.size() > 0) {
-    os << answer.getAnswer();
+  if (!answer.empty()) {
+    os << "Solution: " << answer.getAnswer() << '\n';
+  } else {
+    os << "No solutions\n";
   }
   return os;
 }
 
 template <class Field = double, class EqualityPredicate = DefaultEqualityPredicate<Field>>
-class LinearEquationSolver {
- public:
-  static LinearEquationAnswer<Field> solve(const Field& coeff_a = 0, const Field& coeff_b = 0) {
-//    std::cout << "I'm going to solve it\n";
-
-    if (EqualityPredicate()(coeff_a, 0)) {
-      if (!EqualityPredicate()(coeff_b, 0)) {
-        return LinearEquationAnswer<Field>::EmptySet();
-      }
-      return LinearEquationAnswer<Field>::InfiniteSet();
+LinearEquationAnswer<Field> solveLinearEquation(const Field& coeff_a = 0, const Field& coeff_b = 0) {
+  if (EqualityPredicate()(coeff_a, 0)) {
+    if (!EqualityPredicate()(coeff_b, 0)) {
+      return LinearEquationAnswer<Field>::EmptySet();
     }
-
-    LinearEquationAnswer<Field> result;
-    result.addAnswer(-coeff_b / coeff_a);
-    return result;
+    return LinearEquationAnswer<Field>::InfiniteSet();
   }
-};
+
+  LinearEquationAnswer<Field> result;
+  result.addAnswer(-coeff_b / coeff_a);
+  return result;
+}
 
 #endif //SQUARE_EQUATION_LINEAR_EQUATION_SOLVER_H
