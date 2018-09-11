@@ -3,11 +3,11 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <getopt.h>
 
 void help() {
-  std::cout << "# Square Equation Solver 1.0\n";
   std::cout << "# usage:\n";
-  std::cout << "# [A] [B] [C], where A, B and \n";
+  std::cout << "# [[A] B]C, where A, B and C are coefficients of square equation\n";
 }
 
 void hello() {
@@ -25,7 +25,34 @@ std::vector<double> parseCoeffs(int argc, char* argv[]) {
   return result;
 }
 
+void parseOptions(int argc, char** argv) {
+  const char* const short_opts = "v:h";
+  const option long_opts[] = {
+    {"verbose", no_argument, nullptr, 'v'},
+    {"help", no_argument, nullptr, 'h'},
+    {nullptr, no_argument, nullptr, 0}
+  };
+
+  int opt = 0;
+  while (opt != -1) {
+    const auto opt = getopt_long(argc, argv, short_opts, long_opts, nullptr);
+
+    switch (opt) {
+      case 'h':
+        help();
+        exit(0);
+      case -1:
+        return;
+      case '?':
+      default:
+        std::cerr << "!!! unknown option " << opt << "\n";
+        return;
+    }
+  }
+}
+
 int main(int argc, char *argv[]) {
+  parseOptions(argc, argv);
   if (argc == 1) {
     hello();
     return 0;
