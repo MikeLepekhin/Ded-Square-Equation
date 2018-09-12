@@ -4,3 +4,4 @@ project(square_equation)
 set(CMAKE_CXX_STANDARD 11)
 
 add_executable(square_equation main.cpp)
+add_executable(tests tests.cpp)

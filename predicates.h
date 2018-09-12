@@ -15,7 +15,7 @@ struct DefaultEqualityPredicate {
   }
 };
 
-const double EPS = 1e-6;
+const double EPS = 1e-5;
 
 template<>
 struct DefaultEqualityPredicate<double> {
@@ -23,5 +23,17 @@ struct DefaultEqualityPredicate<double> {
     return std::abs(first - second) < EPS;
   }
 };
+
+bool operator==(const std::vector<double>& v1, const std::vector<double>& v2) {
+  if (v1.size() != v2.size()) {
+    return false;
+  }
+  for (size_t i = 0; i < v1.size(); ++i) {
+    if (std::abs(v1[i] - v2[i]) >= EPS) {
+      return false;
+    }
+  }
+  return true;
+}
 
 #endif //SQUARE_EQUATION_PREDICATES_H

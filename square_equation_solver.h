@@ -13,7 +13,7 @@
 #include <cmath>
 #include <cstdlib>
 
-template <class Field>
+template <class Field, class EqualityPredicate = DefaultEqualityPredicate<double>>
 class SquareEquationAnswer {
  private:
   size_t answer_cnt_{0};
@@ -63,6 +63,14 @@ class SquareEquationAnswer {
     another.answer_2_ = nullptr;
   }
 
+  bool operator==(const SquareEquationAnswer& another) const {
+    if (answer_cnt_ != another.answer_cnt_) {
+      return false;
+    }
+    return (answer_1_ == nullptr || EqualityPredicate()(*answer_1_, *another.answer_1_)) &&
+           (answer_2_ == nullptr || EqualityPredicate()(*answer_2_, *another.answer_2_));
+  }
+
   SquareEquationAnswer& operator=(const SquareEquationAnswer& another) {
     if (this != &another) {
       clearAnswer(answer_1_);
@@ -101,6 +109,9 @@ class SquareEquationAnswer {
       setAnswer(answer_1_, value);
     } else {
       setAnswer(answer_2_, value);
+      if (*answer_1_ > *answer_2_) {
+        std::swap(*answer_1_, *answer_2_);
+      }
     }
     ++answer_cnt_;
   }
@@ -135,6 +146,18 @@ class SquareEquationAnswer {
     for (size_t answer_id = 0; answer_id < answer_cnt_; ++answer_id) {
       result.push_back(getAnswer(answer_id));
     }
+    return result;
+  }
+
+  static SquareEquationAnswer EmptySet() {
+    return SquareEquationAnswer();
+  }
+
+  static SquareEquationAnswer InfiniteSet() {
+    SquareEquationAnswer result;
+
+    result.answer_cnt_ = INFINITE_ROOT_CNT;
+    result.setAnswer(result.answer_1_, 0);
     return result;
   }
 
@@ -185,6 +208,7 @@ SquareEquationAnswer<Field> solveSquareEquation(const Field& coeff_a = 0, const 
     result.addAnswer((-coeff_b + D_sqrt) / (2.0 * coeff_a));
     result.addAnswer((-coeff_b - D_sqrt) / (2.0 * coeff_a));
   }
+  std::cout << result << '\n';
   return result;
 }
 

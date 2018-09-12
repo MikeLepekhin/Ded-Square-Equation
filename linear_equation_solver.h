@@ -37,6 +37,13 @@ class LinearEquationAnswer {
     another.answer_cnt_ = 0;
   }
 
+  bool operator==(const LinearEquationAnswer& another) const {
+    if (answer_cnt_ != another.answer_cnt_) {
+      return false;
+    }
+    return answer_cnt_ == 0 || *answer_ == *another.answer_;
+  }
+
   void addAnswer(const Field& value) {
     if (answer_cnt_ >= 1) {
       throw AnswerOverflowException("It already contains >= 2 solutions");
