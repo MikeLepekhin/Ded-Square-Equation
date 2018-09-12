@@ -1,6 +1,6 @@
-//
-// Created by mike on 08.09.18.
-//
+/*!
+ * \file
+ */
 
 #ifndef SQUARE_EQUATION_PREDICATES_H
 #define SQUARE_EQUATION_PREDICATES_H

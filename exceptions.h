@@ -1,3 +1,7 @@
+/*!
+ * \file
+ */
+
 #ifndef SQUARE_EQUATION_EXCEPTIONS_H
 #define SQUARE_EQUATION_EXCEPTIONS_H
 

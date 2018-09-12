@@ -1,3 +1,12 @@
+/*!
+ * \file
+ * \brief This is the code of program using function solveSquareEquation for calculations.
+ * \details The program has options --help and --verbose.
+ *
+ * \author Mikhail Lepekhin
+ * \version 1.0
+ */
+
 #include "square_equation_solver.h"
 
 #include <iostream>
@@ -9,6 +18,16 @@ void help() {
   std::cout << "# usage:\n";
   std::cout << "# [[A] B]C, where A, B and C are coefficients of square equation\n";
 }
+
+
+/*!
+ * \fn
+ * \brief This function is called when user hasn't entered any argument.
+ * \details The program has options --help and --verbose.
+ *
+ * \author Mikhail Lepekhin
+ * \version 1.0
+ */
 
 void hello() {
   std::cout << "# Square Equation Solver 1.0\n";

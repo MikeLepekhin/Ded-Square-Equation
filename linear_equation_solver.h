@@ -1,3 +1,8 @@
+/*!
+ * \file
+ * \briefly This file contains auxiliary function for solveSquareEquation - solveLinearEquation
+ */
+
 #ifndef SQUARE_EQUATION_LINEAR_EQUATION_SOLVER_H
 #define SQUARE_EQUATION_LINEAR_EQUATION_SOLVER_H
 
@@ -7,6 +12,12 @@
 
 #include <iostream>
 
+
+/*!
+ * \briefly This class is used for convenient storage of solutions returned by linearSquareEquation answer
+ * \tparam Field is type of the answer.
+ * \tparam EqualityPredicate is the functor indicating whether two instances of class Field are equal or not.
+ */
 template <class Field >
 class LinearEquationAnswer {
  private:
@@ -127,6 +138,13 @@ std::ostream& operator<<(std::ostream& os, const LinearEquationAnswer<Field>& an
   }
   return os;
 }
+
+/*!
+ * \fn
+ * \briefly This function is implementation of linear equation solver
+ * \tparam Field is the field in which all the calculations are conducted.
+ * \tparam EqualityPredicate is the functor indicating whether two instances of class Field are equal or not.
+ */
 
 template <class Field = double, class EqualityPredicate = DefaultEqualityPredicate<Field>>
 LinearEquationAnswer<Field> solveLinearEquation(const Field& coeff_a = 0, const Field& coeff_b = 0) {

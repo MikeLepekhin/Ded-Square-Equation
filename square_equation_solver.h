@@ -1,3 +1,8 @@
+/*!
+ * \file
+ * \briefly This file contains the general function providing calculations - solveSquareEquation
+ */
+
 #ifndef SQUARE_EQUATION_SQUARE_EQUATION_SOLVER_H
 #define SQUARE_EQUATION_SQUARE_EQUATION_SOLVER_H
 
@@ -13,7 +18,14 @@
 #include <cmath>
 #include <cstdlib>
 
-template <class Field, class EqualityPredicate = DefaultEqualityPredicate<double>>
+
+/*!
+ * \briefly This class is used for convenient storage of solutions returned by solveSquareEquation answer
+ * \tparam Field is type of the answer.
+ * \tparam EqualityPredicate is the functor indicating whether two instances of class Field are equal or not.
+ *
+ */
+template <class Field, class EqualityPredicate = DefaultEqualityPredicate<Field>>
 class SquareEquationAnswer {
  private:
   size_t answer_cnt_{0};
@@ -187,6 +199,12 @@ std::ostream& operator<<(std::ostream& os, const SquareEquationAnswer<Field>& an
   os << '\n';
   return os;
 }
+
+/*!
+ * \fn
+ * \brief This is the general function of the project containing the implementation of square equations solving.
+ * \details You have opportunity to put your own equality predicate to use for custom field
+ */
 
 template <class Field = double, class EqualityPredicate = DefaultEqualityPredicate<Field>>
 SquareEquationAnswer<Field> solveSquareEquation(const Field& coeff_a = 0, const Field& coeff_b = 0, const Field& coeff_c = 0) {

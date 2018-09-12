@@ -1,8 +1,14 @@
+/*!
+ * \file
+ * \brief This file contains tests for the function squareEquationSolver
+ * \details Class Tester can be used as a handler for every boolean test function.
+ * It reports whether program works correctly on the test or not and catches exceptions
+ */
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include "square_equation_solver.h"
-
 
 class Tester {
  private:
